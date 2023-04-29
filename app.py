@@ -5,6 +5,7 @@ import tensorflow as tf
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+import base64
 
 app = FastAPI()
 
@@ -27,10 +28,12 @@ def preprocess_image(image: Image.Image) -> np.ndarray:
     image_array = np.expand_dims(image_array, axis=0)
     return image_array
 
-@app.post("/predict", response_model=PredictionResult)
-async def predict(file: UploadFile = File(...)):
+@app.post("/predict")
+async def predict(data: dict):
     try:
-        image = Image.open(io.BytesIO(await file.read()))
+        base64_image = data['image']
+        image_bytes = base64.b64decode(base64_image)
+        image = Image.open(io.BytesIO(image_bytes))
         preprocessed_image = preprocess_image(image)
 
         interpreter.set_tensor(input_details[0]['index'], preprocessed_image)
