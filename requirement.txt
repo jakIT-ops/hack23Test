@@ -1,5 +1,9 @@
-fastapi
-uvicorn
-Pillow
-numpy
-tensorflow
+fastapi==0.70.0
+uvicorn==0.15.0
+gunicorn==20.1.0
+numpy==1.21.3
+tensorflow==2.6.2
+Pillow==8.4.0
+python-multipart==0.0.5
+pydantic==1.8.2
+
